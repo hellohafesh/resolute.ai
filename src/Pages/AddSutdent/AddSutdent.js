@@ -20,7 +20,7 @@ const AddSutdent = () => {
 
     const addStudent = (stname, classs, division, roll, adress1, adress2, landmark, city, pincode) => {
         const product = { stname, classs, division, roll, adress1, adress2, landmark, city, pincode };
-        fetch('http://localhost:7000/addstudent', {
+        fetch('https://poridhan-com-server-soumik825.vercel.app/addstudent', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -43,15 +43,7 @@ const AddSutdent = () => {
     }
 
     // }
-    const handleChange = data2 => {
-        // console.log(data2.target.value)
-        // return data2 = data2.target.value;
-    }
-    const handleChangedivition = data1 => {
-        // console.log(data1.target.value)
-        // return data1 = data1.target.value;
 
-    }
 
     return (
         <div>
@@ -103,7 +95,6 @@ const AddSutdent = () => {
                                     { required: "Select Class  is required" })}
 
                                 label="Select Class"
-                                onChange={handleChange}
                                 fullWidth
                                 required
                             >
@@ -137,7 +128,6 @@ const AddSutdent = () => {
                                     { required: "Select Divition  is required" })}
 
                                 label="Select Divition"
-                                onChange={handleChangedivition}
                                 fullWidth
                                 required
                             >

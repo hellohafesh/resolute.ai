@@ -58,9 +58,14 @@ const Layout = (props) => {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Typography variant="h6" noWrap component="div">
-                                Responsive drawer
-                            </Typography>
+                            <Box className="flex justify-between w-full">
+                                <Typography variant="h6" noWrap component="div">
+                                    Logo
+                                </Typography>
+                                <Typography variant="h6" noWrap component="div">
+                                    User
+                                </Typography>
+                            </Box>
                         </Toolbar>
                     </AppBar>
                     <Box
@@ -167,6 +172,7 @@ const Layout = (props) => {
 
                                     </ListItem>
                                 </Link>
+
                                 <Link to="/login">
                                     <ListItem disablePadding>
 

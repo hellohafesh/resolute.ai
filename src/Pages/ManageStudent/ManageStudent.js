@@ -12,23 +12,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import { Button } from '@mui/material';
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import { TextField, Grid } from '@mui/material';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 
 
 
+const style = {
+    position: 'absolute',
+    top: '40%',
+    left: '50%',
+    transform: 'translate(-40%, -40%)',
 
+    bgcolor: 'white',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 
 
@@ -40,7 +42,7 @@ export default function ManageStudent() {
 
 
     // load all students in clinte
-    const url = '  http://localhost:7000/students';
+    const url = '  https://poridhan-com-server-soumik825.vercel.app/students';
     const { data: students = [], refetch } = useQuery({
         queryKey: ['students'],
         queryFn: async () => {
@@ -58,7 +60,7 @@ export default function ManageStudent() {
     })
     //delete user
     const deleteStudentDB = student => {
-        fetch(`http://localhost:7000/studentDelete/${student._id}`, {
+        fetch(`https://poridhan-com-server-soumik825.vercel.app/studentDelete/${student._id}`, {
             method: 'DELETE',
             // headers: {
             //     authorization: `bearer ${localStorage.getItem('accessToken')}`
@@ -78,40 +80,79 @@ export default function ManageStudent() {
     }
 
 
-
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = (details) => setOpen(details, true);
+    const handleClose = () => setOpen(false);
+    console.log(open)
 
 
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 50 }} aria-label="simple table">
-                <TableHead sx={{ bgcolor: '#F33823' }} >
-                    <TableRow>
-                        <TableCell >Name</TableCell>
-                        <TableCell align="right">Class</TableCell>
-                        <TableCell align="right">Roll No.</TableCell>
-                        <TableCell align="right">View/Edit/Delete</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {students?.map((student) => (
-                        <TableRow
-                            key={student._id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {student.stname}
-                            </TableCell>
-                            <TableCell align="right">{student.classs}</TableCell>
-                            <TableCell align="right">{student.roll}</TableCell>
-                            <TableCell align="right" >
-                                <RemoveRedEyeIcon color="primary1" />
-                                <BorderColorIcon color="primary1" />
-                                <Button onClick={() => deleteStudentDB(student)}><DeleteIcon color="primary1" /></Button>
-                            </TableCell>
+        <div>
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 50 }} aria-label="simple table">
+                    <TableHead sx={{ bgcolor: '#F33823' }} >
+                        <TableRow>
+                            <TableCell >Name</TableCell>
+                            <TableCell align="right">Class</TableCell>
+                            <TableCell align="right">Roll No.</TableCell>
+                            <TableCell align="right">View/Edit/Delete</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                        {students?.map((student) => (
+                            <TableRow
+                                key={student._id}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell component="th" scope="row">
+                                    {student.stname}
+                                </TableCell>
+                                <TableCell align="right">{student.classs}</TableCell>
+                                <TableCell align="right">{student.roll}</TableCell>
+                                <TableCell align="right" >
+                                    <Button onClick={() => handleOpen(student)}><RemoveRedEyeIcon color="primary1" /></Button>
+                                    <BorderColorIcon color="primary1" />
+                                    <Button onClick={() => deleteStudentDB(student)}><DeleteIcon color="primary1" /></Button>
+                                </TableCell>
+
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+
+
+            <div>
+
+
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                >
+                    <Box sx={style}>
+                        <h1 className='mb-5 text-2xl text-center bold' style={{}}>Deatails Of {open.stname}</h1>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={4}><TextField id="outlined-basic" value={open.classs} variant="outlined" /></Grid>
+                            <Grid item xs={12} sm={4}><TextField id="outlined-basic" value={open.division} variant="outlined" /></Grid>
+                            <Grid item xs={12} sm={4}><TextField id="outlined-basic" value={open.roll} variant="outlined" /></Grid>
+                            <Grid item xs={12} sm={4}><TextField id="outlined-basic" value={open.adress1} variant="outlined" /></Grid>
+                            <Grid item xs={12} sm={4}><TextField id="outlined-basic" value={open.adress2} variant="outlined" /></Grid>
+                            <Grid item xs={12} sm={4}><TextField id="outlined-basic" value={open.landmark} variant="outlined" /></Grid>
+                            <Grid item xs={12} sm={4}><TextField id="outlined-basic" value={open.city} variant="outlined" /></Grid>
+                            <Grid item xs={12} sm={4}><TextField id="outlined-basic" value={open.pincode} variant="outlined" /></Grid>
+                        </Grid>
+                        <div className="mt-4 flex items-end w-full">
+                            <button onClick={handleClose}><CancelIcon /></button>
+                        </div>
+                    </Box>
+                </Modal>
+            </div>
+
+
+
+
+        </div>
+
     );
 }
